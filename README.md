@@ -12,10 +12,12 @@ Motivation :
 People who want to explore the city can use the app to understand which
 places should be relatively safe according to the crime rate at that location
 and time.
+
 ● Providing insights to the law enforcement agencies :
 Help law and enforcement agencies deploy forces based on the results.
 This can be used as a tool to find out which neighborhood is vulnerable to
 a crime and can be used to assist in crime prevention
+
 ## Background
 We referred various articles and blogs related to the crime rate in NYC, and also
 referred to currently existing similar apps on mobile like ‘Citizen’ which show the recent
@@ -26,6 +28,7 @@ publications on this topics including :
 “Crime forecasting: a machine learning and computer vision approach to crime
 prediction and prevention”
 “Crime hotspot prediction based on dynamic spatial analysis”.
+
 ## Data
 NYPD Complaint Data Current (Year To Date) (NYC OpenData): This primary dataset includes all complaints received by the New York City Police Department (NYPD) for the current year (2022). 
 Precinct Data: This dataset contains all precincts and their addresses in New York City.
@@ -35,6 +38,7 @@ The features are a mix of :
 	– Qualitative Ordinal ( Age groups for suspect and victim ), 
 	– Qualitative Nominal ( Precinct code, type of offense ) 
 with Numerical, Categorical, and Textual values.
+
 ## Existing predictions
 There are crowd sourced applications which give only the real time incidents but our model takes historical data of each location (zip code) into account to assign it a cluster and predict how its assigned cluster would change in near future. We could only find static data analysis and no Kaggle competitions or applications on the topic.
 
@@ -135,7 +139,6 @@ These are the following limitation of our approach:
 - Lack of known classification for the zipcodes makes it difficult to evaluate the classification model. 
 - The predicted outcomes are also limited by the time horizon i.e. we cannot predict the features beyond n days (30)
 - Extrapolation of daily statistics to a longer time period can lead to high variation in the predicted results
-
 
 Next Steps :
 - More features can be incorporated for each zip code to create richer predictions
