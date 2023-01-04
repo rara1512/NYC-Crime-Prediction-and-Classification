@@ -7,6 +7,7 @@ Our problem statement is to analyze and use data for complaints made to the NYPD
 employing models to forecast crime rates in New York City as well as apply an
 unsupervised clustering algorithm to identify hotspots of criminal activity.
 Motivation :
+
 ● Guiding tourists/visitors throughout the city:
 People who want to explore the city can use the app to understand which
 places should be relatively safe according to the crime rate at that location
