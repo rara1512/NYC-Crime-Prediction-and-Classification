@@ -53,7 +53,7 @@ We first performed various preprocessing tasks for our data cleaning:
 
 We also performed Exploratory Data Analysis on our primary dataset after the cleaning. We studied how the data is distributed over different boroughs, distribution of each crime level in different districts. We drew a basic Sankey Diagram to study the distribution of victim’s race vs suspect’s race. We also estimated the population by borough to count the crime rate.
 
-![diagram](https://github.com/rara1512/NYC-Crime-Prediction-and-Classification/tree/main/NYC-Crime-Predicition-and%20Classification-Main/Images)
+![diagram](https://github.com/rara1512/NYC-Crime-Prediction-and-Classification/tree/main/NYC-Crime-Predicition-and%20Classification-Main/Images/Swanky.png)
 
 ## Model and Evaluation
 There were no known labels in our dataset for each zip code, so we used unsupervised clustering algorithms – k means and MeanShift, for clustering similar zip codes together using zip-level features. 
