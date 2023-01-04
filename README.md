@@ -1,6 +1,6 @@
 # NYC-Crime-Prediction-and-Classification
 
-1. Problem, motivations and outcome :
+## Problem, motivations and outcome :
 We aim to study the crime in New York to gauge the safety of various neighborhoods
 and how it evolves with time.
 Our problem statement is to analyze and use data for complaints made to the NYPD by
@@ -15,7 +15,7 @@ and time.
 Help law and enforcement agencies deploy forces based on the results.
 This can be used as a tool to find out which neighborhood is vulnerable to
 a crime and can be used to assist in crime prevention
-2. Background :
+## Background :
 We referred various articles and blogs related to the crime rate in NYC, and also
 referred to currently existing similar apps on mobile like ‘Citizen’ which show the recent
 events categorized into threat levels for a neighborhood. We also referred various
@@ -25,67 +25,73 @@ publications on this topics including :
 “Crime forecasting: a machine learning and computer vision approach to crime
 prediction and prevention”
 “Crime hotspot prediction based on dynamic spatial analysis”.
+## Data :
+NYPD Complaint Data Current (Year To Date) (NYC OpenData): This primary dataset includes all complaints received by the New York City Police Department (NYPD) for the current year (2022). 
+Precinct Data: This dataset contains all precincts and their addresses in New York City.
+New York Zip Codes by Population: This dataset contains all zip codes in New York City with their population. The population data here are from the 2020 American Community Survey. 
+The features are a mix of : 
+	– Quantitative Continuous ( Time of occurrence, Latitude/Longitude ), 
+	– Qualitative Ordinal ( Age groups for suspect and victim ), 
+	– Qualitative Nominal ( Precinct code, type of offense ) 
+with Numerical, Categorical, and Textual values.
+## Existing predictions?
+There are crowd sourced applications which give only the real time incidents but our model takes historical data of each location (zip code) into account to assign it a cluster and predict how its assigned cluster would change in near future. We could only find static data analysis and no Kaggle competitions or applications on the topic.
 
-###########
+## Preprocessing and EDA:
+We first performed various preprocessing tasks for our data cleaning:
+Replaced appropriate values of ‘(null)’ with null, ‘Unk’/‘U’ with ‘Unknown’ etc.
+Removed features which had most of the values as null and carry little to no information about the type of crime and its location such as 'HADEVELOPT','HOUSING_PSA','PARKS_NM'
+Dropped null rows for features which had less than 1% null values in the entire dataset.
+All rows with complaint time before 1st Jan 2022 were discarded, since the dataset claims to have complaints registered in the current year.
+Replaced the row having multiple dates of crime with their mean.
+Split timestamps to date and time for day wise predictions.
+Latitude/Longitudes were used to reverse lookup the zip code for each complaint
+Precinct codes were converted to addresses and later to precinct latitude and longitude.
+Merged additional data – precinct code and zip codes with the original dataset.
+We divided all offenses into one of these 5 categories – Loss of Life/Violence, Sexual, Weapons and Drugs, Theft and others. Out of these five categories, we assumed that region safety is more influenced by the first four.
+Zip code level features ( Counts for offenses related to Loss of Life/Violence, Sexual, Weapons and Drugs, Theft ) were calculated for each day by aggregating the complaints in original dataset.
 
-
-
-1) Channel with most views, likes, dislikes, comments
-2) Distribution of videos across categories
-3) Top channels and its statistics (mean/max/sum) for views, likes, dislikes, comments, etc.
-4) Most watched/uploaded categories of videos
-
-## Data Acquisition
-The data used for this project is collected from the available Youtube data API. This API provides access to data like the view count, likes, dislikes, category of videos, title and description of videos etc. We cleaned this data of redundant and null values for analysis.
-
-## Data Preparation
-
-We need to explore data before analyzing it. First, we performed data cleaning. Youtube provides their data in a rather clean format, so our data cleaning involves only removing unnecessary symbols, and columns, retrieving corresponding categories from ID, grouping data, and handling data types.
-
-1) Preprocessing of data: Unnecessary columns like Description, comments disabled etc, are not really useful for us. So we get rid of them. 
-
-2) Retrieving the category name from ID: The data has a category ID field which is an integer. There is a json file available to read the corresponding category name. We need to replace the category ID with its corresponding name by reading the json file.
-
-3) Datatype of columns: The data provided by the stack overflow data archive had columns like ‘ViewCount’ as strings. Such columns were converted to Integer datatypes to make further computations possible. Converted published date/time to the right format which can be pushed to ES.
-
-4) Grouping of data: We group the videos based on their categories and country for both India and USA to get insights on the viewing behavior in the 2 countries.
-
-## High level design overview
+We also performed Exploratory Data Analysis on our primary dataset after the cleaning. We studied how the data is distributed over different boroughs, distribution of each crime level in different districts. We drew a basic Sankey Diagram to study the distribution of victim’s race vs suspect’s race. We also estimated the population by borough to count the crime rate.
 
 ![diagram](https://github.com/n1khilmane/Youtube-Exploratory-Data-Analysis/blob/main/images/architecture.png)
 
-## Building A Data Analysis Module
+## Model and Evaluation
+There were no known labels in our dataset for each zip code, so we used unsupervised clustering algorithms – k means and MeanShift, for clustering similar zip codes together using zip-level features. 
+Since the number of samples i.e number of zip codes is low (196), we preferred non-hierarchical algorithms which allowed unequal clusters – k-means with 5-7 clusters appeared to be a good fit. We also used the Elbow method with inertia to select a good value for the number of clusters (k = 7).
 
-Using Pyspark and Elasticsearch, we have built a data analysis module that gives interesting analysis and an interactive dashboard to view and understand custom data trends and visualizations.
+![diagram](https://github.com/n1khilmane/Youtube-Exploratory-Data-Analysis/blob/main/images/architecture.png)
 
-1. Ingesting the acquired data:
-The data that is obtained from the youtube api. This data is converted into CSV format and read into Pyspark for further processing.
+Existing seasonality in the data indicated that time series models such as ARIMA and AutoARIMA can be used to predict the feature values for a zip code and the predicted features can in turn be used to assign the zip to one of the now known clusters.
+We explored both ARIMA and AutoARIMA models and decided to use the AutoARIMA which allowed us to use different model parameters for each zip code to account for different time series patterns in the zip codes’ features. Even though the ARIMA model had a marginally better RMSE score as shown below, its output was almost a constant value with no seasonality.
 
-2. Processing the data using Pyspark:
-The appropriate preprocessing is performed on the ingested data before it is loaded into a Pyspark data frame. The data is ready to be given to Elastic search after it is fully processed and available in Pyspark.
+We avoided linear regression models because our target variable is categorical (k clusters) which is better suited for classification models.
+Predictions by ARIMA
+![diagram](https://github.com/n1khilmane/Youtube-Exploratory-Data-Analysis/blob/main/images/architecture.png)
 
-3. Indexing data into Elasticsearch:
-After processing, the data is added to the Elasticsearch index. The Elastic ES-Hadoop library, an open-source, standalone, self-contained, tiny library that enables Hadoop operations to connect with Elasticsearch, is used to integrate Elasticsearch and Pyspark. In the form of an RDD (Resilient Distributed Dataset) (or Pair RDD, to be precise), Elasticsearch-Hadoop offers direct interaction between Elasticsearch and Apache Spark and can read data from Elasticsearch.
+Predictions by AutoARIMA
+![diagram](https://github.com/n1khilmane/Youtube-Exploratory-Data-Analysis/blob/main/images/architecture.png)
 
-4. Visualizing the data in Kibana:
-Finally, we use Kibana to query data from the Elasticsearch index and create an interactive dashboard to visualize the data and show metrics like categories, top liked channels, top disliked channels, etc.
+## Project Pipeline
+![diagram](https://github.com/n1khilmane/Youtube-Exploratory-Data-Analysis/blob/main/images/architecture.png)
 
-## Dashboard
+## Evaluation and Visualization :
+For evaluating time series predictions, we used RMSE and MFE errors.
 
-![diagram](https://github.com/n1khilmane/Youtube-Exploratory-Data-Analysis/blob/main/images/dashboard.png)
+Insert Tables
 
-![diagram](https://github.com/n1khilmane/Youtube-Exploratory-Data-Analysis/blob/main/images/dashboard1.png)
+For selecting the number of clusters (k = 7) in unsupervised clustering, we used the Elbow-method with inertia.
+![diagram](https://github.com/n1khilmane/Youtube-Exploratory-Data-Analysis/blob/main/images/architecture.png)
 
-## Lessons learned
-1) How to read ever-updated data on a real time basis.
-2) How to process and condense huge amounts of data quickly using spark.
-3) Use ES Hadoop to push data to ElasticSearch
-4) Utilize Elastic Search for quick computations and presentation on Kibana Dashboards.
+t-SNE algorithm was used to visualize the separation of assigned 4-D clusters in 2 dimensions. Each point represents one zip code and its assigned cluster.
+Cluster centers scaled : 
 
-## Future Work
-1) Data for more countries can be added
-2) Paid YouTube API can be used for realtime limitless feed of data
-3) The data can be fetched in real time from the Youtube API using Kafka and sent to a topic from where Spark can read the same as an input.
+Insert Table
 
+![diagram](https://github.com/n1khilmane/Youtube-Exploratory-Data-Analysis/blob/main/images/architecture.png)
 
+Finally for classification on new features, we used k-NN classification with probabilistic interpretation and selected the k value which minimized Categorical Cross Entropy loss on a validation dataset(80–20 split) i.e. k = 9.
+![diagram](https://github.com/n1khilmane/Youtube-Exploratory-Data-Analysis/blob/main/images/architecture.png)
 
+The variation of cluster assignment in September 2022 against the ground truth cluster for each zip code has been captured by the following confusion matrix where the rows denote the assumed ground truth cluster for each zip code, and the columns denote the assigned cluster by k-NN model on each day of the month : 
+![diagram](https://github.com/n1khilmane/Youtube-Exploratory-Data-Analysis/blob/main/images/architecture.png)
+This shows that the ‘safe’ zip codes (C0 and C6) are consistently safe. The ‘unsafe’ zipcodes are consistently unsafe (C5, C1, C3). The variation in the assigned cluster ID captures the temporal nature of criminal activities for the zip codes.
