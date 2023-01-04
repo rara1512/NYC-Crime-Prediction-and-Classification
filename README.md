@@ -59,41 +59,38 @@ We also performed Exploratory Data Analysis on our primary dataset after the cle
 There were no known labels in our dataset for each zip code, so we used unsupervised clustering algorithms – k means and MeanShift, for clustering similar zip codes together using zip-level features. 
 Since the number of samples i.e number of zip codes is low (196), we preferred non-hierarchical algorithms which allowed unequal clusters – k-means with 5-7 clusters appeared to be a good fit. We also used the Elbow method with inertia to select a good value for the number of clusters (k = 7).
 
-![diagram](https://github.com/n1khilmane/Youtube-Exploratory-Data-Analysis/blob/main/images/architecture.png)
+![diagram](https://github.com/rara1512/NYC-Crime-Prediction-and-Classification/blob/main/Images/Elbow.png)
 
 Existing seasonality in the data indicated that time series models such as ARIMA and AutoARIMA can be used to predict the feature values for a zip code and the predicted features can in turn be used to assign the zip to one of the now known clusters.
 We explored both ARIMA and AutoARIMA models and decided to use the AutoARIMA which allowed us to use different model parameters for each zip code to account for different time series patterns in the zip codes’ features. Even though the ARIMA model had a marginally better RMSE score as shown below, its output was almost a constant value with no seasonality.
 
 We avoided linear regression models because our target variable is categorical (k clusters) which is better suited for classification models.
 Predictions by ARIMA
-![diagram](https://github.com/n1khilmane/Youtube-Exploratory-Data-Analysis/blob/main/images/architecture.png)
+![diagram](https://github.com/rara1512/NYC-Crime-Prediction-and-Classification/blob/main/Images/Arima.png)
 
 Predictions by AutoARIMA
-![diagram](https://github.com/n1khilmane/Youtube-Exploratory-Data-Analysis/blob/main/images/architecture.png)
+![diagram](https://github.com/rara1512/NYC-Crime-Prediction-and-Classification/blob/main/Images/AutoARIMA.jpg)
 
 ## Project Pipeline
-![diagram](https://github.com/n1khilmane/Youtube-Exploratory-Data-Analysis/blob/main/images/architecture.png)
+![diagram](https://github.com/rara1512/NYC-Crime-Prediction-and-Classification/blob/main/Images/Pipeline.png)
 
 ## Evaluation and Visualization
 - For evaluating time series predictions, we used RMSE and MFE errors.
 
 Insert Tables
 
-- For selecting the number of clusters (k = 7) in unsupervised clustering, we used the Elbow-method with inertia.
-![diagram](https://github.com/n1khilmane/Youtube-Exploratory-Data-Analysis/blob/main/images/architecture.png)
-
 - t-SNE algorithm was used to visualize the separation of assigned 4-D clusters in 2 dimensions. Each point represents one zip code and its assigned cluster.
 Cluster centers scaled : 
 
 Insert Table
 
-![diagram](https://github.com/n1khilmane/Youtube-Exploratory-Data-Analysis/blob/main/images/architecture.png)
+![diagram](https://github.com/rara1512/NYC-Crime-Prediction-and-Classification/blob/main/Images/Clusters.png)
 
 - Finally for classification on new features, we used k-NN classification with probabilistic interpretation and selected the k value which minimized Categorical Cross Entropy loss on a validation dataset(80–20 split) i.e. k = 9.
-![diagram](https://github.com/n1khilmane/Youtube-Exploratory-Data-Analysis/blob/main/images/architecture.png)
+![diagram](https://github.com/rara1512/NYC-Crime-Prediction-and-Classification/blob/main/Images/CatCrossEntropy.png)
 
 The variation of cluster assignment in September 2022 against the ground truth cluster for each zip code has been captured by the following confusion matrix where the rows denote the assumed ground truth cluster for each zip code, and the columns denote the assigned cluster by k-NN model on each day of the month : 
-![diagram](https://github.com/n1khilmane/Youtube-Exploratory-Data-Analysis/blob/main/images/architecture.png)
+![diagram](https://github.com/rara1512/NYC-Crime-Prediction-and-Classification/blob/main/Images/ConfusionMatrix.png)
 This shows that the ‘safe’ zip codes (C0 and C6) are consistently safe. The ‘unsafe’ zipcodes are consistently unsafe (C5, C1, C3). The variation in the assigned cluster ID captures the temporal nature of criminal activities for the zip codes.
 
 ## Assumptions and Limitations
