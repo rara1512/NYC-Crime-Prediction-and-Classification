@@ -112,7 +112,7 @@ Cluster centers scaled :
 ![diagram](https://github.com/rara1512/NYC-Crime-Prediction-and-Classification/blob/main/Images/Clusters.png)
 
 - Finally for classification on new features, we used k-NN classification with probabilistic interpretation and selected the k value which minimized Categorical Cross Entropy loss on a validation dataset(80–20 split) i.e. k = 9.
-- 
+
 ![diagram](https://github.com/rara1512/NYC-Crime-Prediction-and-Classification/blob/main/Images/CatCrossEntropy.png)
 
 The variation of cluster assignment in September 2022 against the ground truth cluster for each zip code has been captured by the following confusion matrix where the rows denote the assumed ground truth cluster for each zip code, and the columns denote the assigned cluster by k-NN model on each day of the month : 
