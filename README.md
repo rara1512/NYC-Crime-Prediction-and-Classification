@@ -80,7 +80,12 @@ Predictions by AutoARIMA
 ## Evaluation and Visualization
 - For evaluating time series predictions, we used RMSE and MFE errors.
 
-Insert Tables
+| Arima               | RMSE (Mean across zip codes) | MFE (Mean across zip codes) |
+| ------------------- | ---------------------------- | --------------------------- |
+| Category 1          |	1.55		      	     |	0.75 			   |
+| Category 2          |	0.68	                     |	0.19			   |
+| Category 3          |	1.26			     |	0.26			   |
+| Category 4          |	4.68			     |	1.48			   |
 
 - t-SNE algorithm was used to visualize the separation of assigned 4-D clusters in 2 dimensions. Each point represents one zip code and its assigned cluster.
 Cluster centers scaled : 
