@@ -87,10 +87,27 @@ Predictions by AutoARIMA
 | Category 3          |	1.26			     |	0.26			   |
 | Category 4          |	4.68			     |	1.48			   |
 
+
+| Auto-Arima               | RMSE (Mean across zip codes) | MFE (Mean across zip codes) |
+| ------------------- | ---------------------------- | --------------------------- |
+| Category 1          |	1.59		      	     |	0.74 			   |
+| Category 2          |	0.71	                     |	0.17			   |
+| Category 3          |	1.30			     |	0.29			   |
+| Category 4          |	4.69			     |	1.41			   |
+
 - t-SNE algorithm was used to visualize the separation of assigned 4-D clusters in 2 dimensions. Each point represents one zip code and its assigned cluster.
 Cluster centers scaled : 
 
-Insert Table
+| Cluster ID               | Category1 (Loss of life/Felony) | Category2 (Sexual) | Category3 (Drugs/Weapons) | Category4 (Theft) | Interpretation
+| ------------------- | ---------------------------- | --------------------------- |------------|-------------------------|----------|
+| 0 | -0.57 | -0.64 | -0.67 | -0.85 | Fewest crimes across all 4 categories; Safest zip codes |
+| 1 | 2.00 | 1.69 | 3.37 | 1.44 | High crime rates across all 4 categories; second worst cluster of zip codes |
+| 2 | -0.10 | 0.00 | 0.79 | 1.87 | Large number of thefts and weapon related complaints; Relatively few violent crimes |
+| 3 | 1.64 | 1.96 | 1.04 | 0.75 | High crime rates across first 3 categories excluding thefts; Should be avoided |
+| 4 | 0.49 | 0.73 | -0.04 | 0.12 | Average crime rates |
+| 5 | 4.57 | 2.83 | 2.24 | 1.23 | Most crimes across all 4 categories; worst zip codes |
+| 6 | -0.56 | -0.61 | -0.03 | 0.21| Large number of thefts; Relatively few violent crimes |
+
 
 ![diagram](https://github.com/rara1512/NYC-Crime-Prediction-and-Classification/blob/main/Images/Clusters.png)
 
