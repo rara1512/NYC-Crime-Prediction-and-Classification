@@ -66,12 +66,15 @@ We explored both ARIMA and AutoARIMA models and decided to use the AutoARIMA whi
 
 We avoided linear regression models because our target variable is categorical (k clusters) which is better suited for classification models.
 Predictions by ARIMA
+
 ![diagram](https://github.com/rara1512/NYC-Crime-Prediction-and-Classification/blob/main/Images/Arima.png)
 
 Predictions by AutoARIMA
+
 ![diagram](https://github.com/rara1512/NYC-Crime-Prediction-and-Classification/blob/main/Images/AutoARIMA.jpg)
 
 ## Project Pipeline
+
 ![diagram](https://github.com/rara1512/NYC-Crime-Prediction-and-Classification/blob/main/Images/Pipeline.png)
 
 ## Evaluation and Visualization
@@ -87,10 +90,13 @@ Insert Table
 ![diagram](https://github.com/rara1512/NYC-Crime-Prediction-and-Classification/blob/main/Images/Clusters.png)
 
 - Finally for classification on new features, we used k-NN classification with probabilistic interpretation and selected the k value which minimized Categorical Cross Entropy loss on a validation dataset(80–20 split) i.e. k = 9.
+- 
 ![diagram](https://github.com/rara1512/NYC-Crime-Prediction-and-Classification/blob/main/Images/CatCrossEntropy.png)
 
 The variation of cluster assignment in September 2022 against the ground truth cluster for each zip code has been captured by the following confusion matrix where the rows denote the assumed ground truth cluster for each zip code, and the columns denote the assigned cluster by k-NN model on each day of the month : 
+
 ![diagram](https://github.com/rara1512/NYC-Crime-Prediction-and-Classification/blob/main/Images/ConfusionMatrix.png)
+
 This shows that the ‘safe’ zip codes (C0 and C6) are consistently safe. The ‘unsafe’ zipcodes are consistently unsafe (C5, C1, C3). The variation in the assigned cluster ID captures the temporal nature of criminal activities for the zip codes.
 
 ## Assumptions and Limitations
